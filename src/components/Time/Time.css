@@ -1,0 +1,12 @@
+.time-item {
+	color: white;
+}
+
+.time-item.time {
+	font-size: 80px;
+}
+
+.time-item.date {
+	font-size: 20px
+}
+
