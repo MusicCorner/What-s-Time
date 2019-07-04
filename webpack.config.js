@@ -32,8 +32,11 @@ module.exports = {
 						loader: 'style-loader',
 					},
 					{
-						loader: 'css-loader',
+						loader: require.resolve('css-loader'),
 						options: {
+							modules: {
+								localIdentName: '[name]__[local]___[hash:base64:5]',
+							},
 							importLoaders: 1,
 						},
 					},
@@ -50,8 +53,8 @@ module.exports = {
 		headers: {
 			'Access-Control-Allow-Origin': '*',
 			'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-			'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization'
-		}
+			'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+		},
 	},
 	plugins: [
 		new HtmlWebpackPlugin({

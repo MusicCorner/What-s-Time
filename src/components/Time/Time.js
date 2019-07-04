@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import './Time.css';
+import Loader from '../common/Loader/Loader';
+import styles from './Time.css';
 
 export default class Time extends React.Component {
 	static propTypes = {
@@ -11,19 +12,28 @@ export default class Time extends React.Component {
 	constructor(props) {
 		super(props);
 		this.props = props;
-		const { time } = this.props;
 		this.state = {
-			dateTime: moment(time.datetime, 'YYYY-MM-DDTHH:mm:ss.SSS[Z]').toDate(),
+			dateTime: null,
 		};
 	}
 
-	componentDidMount() {
-		this.startTiming();
+	componentDidUpdate(prevProps) {
+		const { time } = this.props;
+		if (prevProps.time.value !== time.value) {
+			this.setState(() => ({
+				dateTime: moment(time.value.datetime, 'YYYY-MM-DDTHH:mm:ss').toDate(),
+			}), () => {
+				if (this.timer) {
+					clearInterval(this.timer);
+				}
+				this.startTiming();
+			});
+		}
 	}
 
 	startTiming = () => {
 		const { dateTime } = this.state;
-		setInterval(() => {
+		this.timer = setInterval(() => {
 			dateTime.setSeconds(dateTime.getSeconds() + 1);
 			this.setState({
 				dateTime,
@@ -57,17 +67,29 @@ export default class Time extends React.Component {
 	}
 
 	render() {
+		const { time } = this.props;
+		const { dateTime } = this.state;
+		if (!dateTime) {
+			return null;
+		}
+
+		if (time.isPending) {
+			return (
+				<Loader />
+			);
+		}
+
 		const {
 			year, monthNumber, monthName, dayOfMonth,
 			weekDayName, hours, minutes, seconds,
 		} = this.getTimeObject();
 
 		return (
-			<div className="time__container">
-				<div className="time-item date">
+			<div>
+				<div className={`${styles.timeItem} ${styles.date}`}>
 					{year} year {monthNumber} ({monthName}) {dayOfMonth} {weekDayName}
 				</div>
-				<div className="time-item time">
+				<div className={`${styles.timeItem} ${styles.time}`}>
 					{hours}:{minutes}:{seconds}
 				</div>
 			</div>

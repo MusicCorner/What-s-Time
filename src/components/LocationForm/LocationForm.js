@@ -2,11 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { SELECT_TIMEZONE } from '../../constants/common/common';
 import LocationSelect from './LocationSelect/LocationSelect';
-import './LocationForm.css';
+import styles from './LocationForm.css';
+import Loader from '../common/Loader/Loader';
 
 export default class TimeForm extends React.Component {
 	static propTypes = {
 		onChangeSelect: PropTypes.func.isRequired,
+		getTimeByLocation: PropTypes.func.isRequired,
 		locations: PropTypes.object.isRequired,
 		getLocations: PropTypes.func.isRequired,
 	}
@@ -18,8 +20,8 @@ export default class TimeForm extends React.Component {
 		this.state = {
 			select: {
 				isToggled: false,
-			}
-		}
+			},
+		};
 	}
 
 	componentDidMount() {
@@ -35,27 +37,40 @@ export default class TimeForm extends React.Component {
 			select: {
 				...select,
 				isToggled: !select.isToggled,
-			}
+			},
 		});
 	}
 
+	getTimeBySelectChange = (location) => {
+		const { onChangeSelect, getTimeByLocation } = this.props;
+		onChangeSelect(location);
+		getTimeByLocation(location);
+	}
+
 	render() {
-		const { onChangeSelect, locations } = this.props;
+		const { locations } = this.props;
 		const { select } = this.state;
 		const isSelectToggled = select.isToggled;
 
+
+		if (locations.isPending) {
+			return (
+				<Loader />
+			);
+		}
+
 		return (
-			<form className="location-form__container">
-				<div className="title" onClick={this.toggleTimeZoneSelect}>
+			<form className={styles.locationFormContainer}>
+				<div className={styles.title} onClick={this.toggleTimeZoneSelect}>
 					{SELECT_TIMEZONE}
 				</div>
 				{isSelectToggled && (
 					<LocationSelect
-						onChangeSelect={onChangeSelect}
+						onChangeSelect={this.getTimeBySelectChange}
 						locations={locations}
 					/>
 				)}
 			</form>
-		)
+		);
 	}
 }

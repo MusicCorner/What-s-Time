@@ -24,9 +24,9 @@ function* fetchTime(action) {
 	}
 }
 
-function* sagas() {
+function* mainSagas() {
 	yield takeEvery(LOCATION_ACTIONS.FETCH_LOCATIONS_REQUEST, fetchLocations);
 	yield takeEvery(TIME_ACTIONS.FETCH_TIME_REQUEST, fetchTime);
 }
 
-export default sagas;
+export default mainSagas;

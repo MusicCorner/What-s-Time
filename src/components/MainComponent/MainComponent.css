@@ -1,5 +1,12 @@
-.main__container {
+.mainContainer {
 	height: 100vh;
 	background: rgb(2,0,36);
 	background: linear-gradient(45deg, rgba(2,0,36,1) 0%, rgba(8,44,88,1) 46%, rgba(109,150,228,1) 100%);
+}
+
+.contentMainContainer {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 50px;
 }
