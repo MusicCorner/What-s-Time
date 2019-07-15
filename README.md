@@ -12,4 +12,4 @@ to build:
 
 1) npm run build
 ----------------------------------------------------------
-Build will appear in dist folder in the root of Application
+Build will appear in dist folder in the root of an application
